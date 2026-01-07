@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - ReLeaf</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- cart sidebar -->
+    <aside class="sidebar cart-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="cart-title">Your Cart</h2>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- cart items will be added here dynamically -->
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="sidebar-btn checkout-btn">CHECKOUT</button>
+            <button class="sidebar-btn logout-btn">LOG OUT</button>
+        </div>
+    </aside>
+
+    <!-- toast notification -->
+    <div class="toast" id="toast">Added to cart!</div>
+
+    <div class="main-content">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <img src="images/logo/logo_with_no_background.png" alt="ReLeaf Logo" class="logo-icon">
+                    <span class="logo-text">ReLeaf</span>
+                </div>
+                <nav class="main-nav">
+                    <a href="{{ url_for('core.index' )}}" class="nav-link" title="Home">Home</a>
+                    <a href="{{ url_for('products.products' )}}" class="nav-link" title="Products">Products</a>
+                    <a href="{{ url_for('core.about' )}}" class="nav-link" title="About Us">About Us</a>
+                    <a href="{{ url_for('core.contact' )}}" class="nav-link" title="Contact Us">Contact Us</a>
+                </nav>
+                <div class="header-icons">
+                    {% if current_user.is_authenticated %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.profile') }}">
+                            <img src="images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% else %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.login') }}">
+                            <img src="images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% endif %}
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <img src="images/logo/transparent_cart_logo.png" alt="Cart" class="icon-img">
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contact Us Page Content -->
+        <main class="contact-page">
+            <section class="contact-section">
+                <div class="contact-container">
+                    <!-- Left Welcome Panel -->
+                    <div class="contact-welcome-panel">
+                        <h1 class="welcome-title">Welcome<br>to ReLeaf!</h1>
+                        <p class="welcome-text">
+                            Hi! Need<br>
+                            assistance?<br>
+                            Let us know your<br>
+                            concern, and we'll<br>
+                            do our best to<br>
+                            resolve it. Get in<br>
+                            touch using the<br>
+                            details provided.
+                        </p>
+                        <div class="welcome-arrows">&gt;&gt;</div>
+                    </div>
+
+                    <!-- Right Contact Form -->
+                    <div class="contact-form-wrapper">
+                        <h2 class="contact-form-title">Contact Us</h2>
+                        <form class="auth-form" id="contactForm">
+                            <div class="form-group">
+                                <label for="contactName" class="form-label">Name</label>
+                                <input type="text" id="contactName" class="form-input" placeholder="Enter your name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactEmail" class="form-label">Email</label>
+                                <input type="email" id="contactEmail" class="form-input" placeholder="Enter your email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactPhone" class="form-label">Phone Number</label>
+                                <input type="tel" id="contactPhone" class="form-input" placeholder="Enter your phone number (+63)" required pattern="[0-9+\-\s()]+">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactMessage" class="form-label">Message</label>
+                                <textarea id="contactMessage" class="form-input contact-textarea" placeholder="Enter your message" rows="5" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="auth-btn">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- bottom navigation (mobile & tablet) -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="{{ url_for('core.index' )}}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/Home.png" alt="Home" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Home</span>
+            </a>
+            <a href="{{ url_for('products.products' )}}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/Products.png" alt="Products" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Products</span>
+            </a>
+            <a href="{{ url_for('core.about' )}}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/about_us.png" alt="About" class="bottom-nav-icon">
+                <span class="bottom-nav-label">About Us</span>
+            </a>
+            <a href="{{ url_for('core.contact' )}}" class="bottom-nav-item active">
+                <img src="images/CellphoneResponsiveness_Logo/contact.png" alt="Contact" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Contact</span>
+            </a>
+        </div>
+    </nav>
+
+    <script src="/js/cart-manager.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>

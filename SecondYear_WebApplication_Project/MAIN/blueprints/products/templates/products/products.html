@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - ReLeaf</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        
+        <div class="flash-notification {{ category }}" id = flash_notif>
+            <span>{{ message }}</span>
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Cart Sidebar -->
+    <aside class="sidebar cart-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="cart-title">Your Cart</h2>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- cart items will be added here dynamically -->
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">₱0.00</span>
+            </div>
+            <button class="sidebar-btn checkout-btn">CHECKOUT</button>
+            <button class="sidebar-btn logout-btn">LOG OUT</button>
+        </div>
+    </aside>
+
+    <!-- toast notification -->
+    <div class="toast" id="toast">Added to cart!</div>
+
+    <!-- header -->
+    <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <img src="/images/logo/logo_with_no_background.png" alt="ReLeaf Logo" class="logo-icon">
+                    <span class="logo-text">ReLeaf</span>
+                </div>
+                <nav class="main-nav">
+                    <a href="{{ url_for('core.index') }}" class="nav-link">Home</a>
+                    <a href="{{ url_for('products.products') }}" class="nav-link">Products</a>
+                    <a href="{{ url_for('core.about') }}" class="nav-link">About Us</a>
+                    <a href="{{ url_for('core.contact') }}" class="nav-link">Contact Us</a>
+                </nav>
+                <div class="header-icons">
+                    {% if current_user.is_authenticated %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.profile') }}">
+                            <img src="/images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% else %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.login') }}">
+                            <img src="/images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% endif %}
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <img src="/images/logo/transparent_cart_logo.png" alt="Cart" class="icon-img">
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+    </header>
+
+    <!-- Products Banner Hero Section -->
+    <section class="products-banner">
+        <img src="/images/logo/ProductPage_Banner_with_no_text.png" alt="Products Banner" class="products-banner-image">
+        <div class="products-banner-content">
+            <h1 class="products-banner-title">EXPLORE VARIOUS RELEAF COLLECTION</h1>
+            <p class="products-banner-subtitle">Don't miss out to shopping collection from us!.</p>
+        </div>
+    </section>
+
+    <div class="main-content">
+        <!-- products section -->
+        <section class="products-section">
+            <h1 class="page-title">OUR PRODUCTS</h1>
+            <p class="page-subtitle">Our products are designed to support eco-friendly living through practical, sustainable alternatives for everyday use. Each item is carefully sourced and crafted to reduce waste, protect the planet, and make greener choices simple for everyone.</p>
+            
+            <!-- search and filter bar -->
+            <div class="search-filter-bar">
+                <div class="filter-dropdown-container">
+                    <button type="button" class="filter-icon-btn" id="filterToggle">
+                        <img src="/images/logo/transparent_filter_logo.png" alt="Filter" class="filter-icon-img">
+                    </button>
+                    
+                    <!-- Filter Dropdown -->
+                    <div class="filter-dropdown" id="filterDropdown">
+                        <div class="filter-section">
+                            <label class="filter-label">Minimum Rating</label>
+                            <div class="rating-options">
+                                <button type="button" class="rating-option" data-rating="1">1★+</button>
+                                <button type="button" class="rating-option" data-rating="2">2★+</button>
+                                <button type="button" class="rating-option" data-rating="3">3★+</button>
+                                <button type="button" class="rating-option" data-rating="4">4★+</button>
+                                <button type="button" class="rating-option" data-rating="5">5★</button>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-section">
+                            <label class="filter-label">Price Range</label>
+                            <div class="price-inputs">
+                                <input type="number" class="price-input" id="minPrice" placeholder="Min" min="0">
+                                <span>—</span>
+                                <input type="number" class="price-input" id="maxPrice" placeholder="Max" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="filter-actions">
+                            <button type="button" class="filter-btn apply-filter-btn" id="applyFilters">Apply Filter</button>
+                            <button type="button" class="filter-btn clear-filter-btn" id="clearFilters">Clear</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" class="search-input-field" placeholder="Search..." id="searchInput">
+                    <button type="button" class="search-icon-btn">
+                        <img src="/images/logo/transparent_searchs_logo.png" alt="Search" width="20" height="20">
+                    </button>
+                </div>
+                <select class="category-select">
+                    <option value="">Category</option>
+                    <option value="Eco Household">Eco Household</option>
+                    <option value="Eco Fashion">Eco Fashion</option>
+                    <option value="Gardening">Gardening</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Self Care">Self Care</option>
+                </select>
+            </div>
+
+            <!-- products grid -->
+            <div class="products-grid" id="productsGrid">
+                {% for product in products %}
+                <div class = "product-card" data-products-id = "{{ product.pid }}">
+                    <div class = "product-image">
+                        <img src= "{{ ('/images/Products/' + product.product_image) }}" alt="{{ product.product_name }}">
+                    </div>
+                    <h3 class = "product-name">{{ product.product_name }}</h3>
+                    <div class = "product-reviews">
+                        <span class = "stars"> {{ '★' * product.product_rating |int }} {{ '☆' * (5 - product.product_rating |int )}} </span>
+                        <span class = "review-count">({{ product.product_reviews }})</span>
+                    </div>
+                    <div class = "price-add-row">
+                        <span class = "product-price">₱{{ product.product_price }}</span>
+                        <button class="add-btn" onclick="addToCart('{{ product.pid }}')">
+                            Add <span class = "cart-icon" >🛒</span>
+                        </button>
+                    </div>
+                </div>
+                    
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button type="button" class="page-btn prev-page" disabled>Previous</button>
+                <button type="button" class="page-btn page-number active">1</button>
+                <button type="button" class="page-btn page-number">2</button>
+                <button type="button" class="page-btn next-page">Next</button>
+            </div>
+        </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="/images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="/images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="/images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="/images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- bottom navigation (mobile & tablet) -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="{{ url_for('core.index') }}" class="bottom-nav-item">
+                <img src="/images/CellphoneResponsiveness_Logo/Home.png" alt="Home" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Home</span>
+            </a>
+            <a href="{{ url_for('products.products') }}" class="bottom-nav-item active">
+                <img src="/images/CellphoneResponsiveness_Logo/Products.png" alt="Products" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Products</span>
+            </a>
+            <a href="{{ url_for('core.about') }}" class="bottom-nav-item">
+                <img src="/images/CellphoneResponsiveness_Logo/about_us.png" alt="About" class="bottom-nav-icon">
+                <span class="bottom-nav-label">About Us</span>
+            </a>
+            <a href="{{ url_for('core.contact') }}" class="bottom-nav-item">
+                <img src="/images/CellphoneResponsiveness_Logo/contact.png" alt="Contact" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Contact</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- product details modal -->
+    <div class="product-modal-overlay" id="productModal">
+        <div class="product-modal">
+            <button class="modal-close-btn" id="closeModal">&times;</button>
+            
+            <div class="modal-content">
+                <!-- Left Section: Product Gallery -->
+                <div class="modal-gallery">
+                    <div class="modal-main-image">
+                        <img id="modalMainImage" src="/images/logo/logo_with_no_background.png" alt="Product" class="main-img">
+                    </div>
+                </div>
+                
+                <!-- Right Section: Product Info -->
+                <div class="modal-info">
+                    <div class="modal-brand" id="modalBrand">ReLeaf</div>
+                    <h2 class="modal-product-name" id="modalProductName"></h2>
+                    <div class="modal-rating">
+                        <span class="modal-stars" id="modalStars"></span>
+                        <span class="modal-reviews" id="modalReviews"></span>
+                    </div>
+                    <div class="modal-price" id="modalPrice"></div>
+                    
+                    <div class="modal-section">
+                        <div class="modal-label">Color</div>
+                        <div class="modal-color-options" id="modalColors">
+                            <button class="color-option active" data-color="white" title="White">
+                                <img src="/images/Products/product1.jpg" alt="White">
+                            </button>
+                            <button class="color-option" data-color="gray" title="Gray">
+                                <img src="/images/Products/product2.jpg" alt="Gray">
+                            </button>
+                            <button class="color-option" data-color="black" title="Black">
+                                <img src="/images/Products/product3.jpg" alt="Black">
+                            </button>
+                        </div>
+                        <div class="selected-color-name" id="selectedColorName">White</div>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <div class="modal-label">Description</div>
+                        <p class="modal-description" id="modalDescription"></p>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="modal-add-btn" id="modalAddBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"/>
+                                <circle cx="20" cy="21" r="1"/>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            </svg>
+                            Add to cart
+                        </button>
+                        <button class="modal-wishlist-btn" id="modalWishlistBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="modal-delivery-info">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13"/>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                            <circle cx="5.5" cy="18.5" r="2.5"/>
+                            <circle cx="18.5" cy="18.5" r="2.5"/>
+                        </svg>
+                        <span>Free delivery on orders over ₱500.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const isAuthenticated = {{ current_user.is_authenticated | tojson}};
+        const productsData = {{ product_data | tojson }};
+    </script>
+
+    <script src="/js/cart-manager.js"></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/products-script.js"></script>
+</body>
+</html>

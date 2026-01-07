@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - ReLeaf Admin</title>
+    <link rel="stylesheet" href="/style/admin.css">
+</head>
+<body>
+    <!-- flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        
+        <div class="flash-notification {{ category }}" id = flash_notif>
+            <span>{{ message }}</span>
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- admin header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="admin-title">Manage Products</h1>
+                <p class="welcome-text">View and manage all products</p>
+            </div>
+            <div class="header-right">
+                <a href="{{ url_for('admin.admin') }}" class="btn-back">← Back to Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- main content -->
+    <main class="admin-container">
+        <!-- Toolbar Section -->
+        <section class="toolbar-section">
+            <div class="toolbar-left">
+                <h2 class="section-title">Product Inventory ({{ products|length if products else 0 }})</h2>
+            </div>
+            <div class="toolbar-right">
+                <a href="{{ url_for('admin.add_products') }}" class="btn-add-new">
+                    <span class="btn-icon">➕</span>
+                    Add New Product
+                </a>
+            </div>
+        </section>
+
+        <!-- Search and Filter Section -->
+        <section class="filter-section">
+            <div class="filter-card">
+                <form method="GET" class="filter-form">
+                    <div class="filter-group">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            class="filter-input" 
+                            placeholder="Search products..."
+                            value="{{ request.args.get('search', '') }}"
+                        >
+                    </div>
+                    <div class="filter-group">
+                        <select name="category" class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="Eco Household" {% if request.args.get('category') == 'Eco Household' %}selected{% endif %}>Eco Household</option>
+                            <option value="Eco Fashion" {% if request.args.get('category') == 'Eco Fashion' %}selected{% endif %}>Eco Fashion</option>
+                            <option value="Gardening" {% if request.args.get('category') == 'Gardening' %}selected{% endif %}>Gardening</option>
+                            <option value="Travel" {% if request.args.get('category') == 'Travel' %}selected{% endif %}>Travel</option>
+                            <option value="Self Care" {% if request.args.get('category') == 'Self Care' %}selected{% endif %}>Self Care</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-filter">🔍 Search</button>
+                    <a href="{{ url_for('admin.manage_products') }}" class="btn-clear">Clear</a>
+                </form>
+            </div>
+        </section>
+
+        <!-- Products Table Section -->
+        <section class="table-section">
+            <div class="table-card">
+                {% if products %}
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Rating</th>
+                                    <th>Reviews</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                    <tr class="table-row">
+                                        <td class="td-id">{{ product.pid }}</td>
+                                        <td class="td-product">
+                                            <div class="product-cell">
+                                                <div class="product-info">
+                                                    <div class="product-name">{{ product.product_name }}</div>
+                                                    <div class="product-desc">{{ product.product_description[:50] }}...</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="td-category">
+                                            <span class="category-badge">{{ product.product_category }}</span>
+                                        </td>
+                                        <td class="td-price">₱{{ product.product_price }}</td>
+                                        <td class="td-stock">
+                                            <span class="stock-badge {% if product.product_stock > 10 %}stock-high{% elif product.product_stock > 0 %}stock-low{% else %}stock-out{% endif %}">
+                                                {{ product.product_stock }}
+                                            </span>
+                                        </td>
+                                        <td class="td-rating">
+                                            {% if product.product_rating %}
+                                                ⭐ {{ '%.1f'|format(product.product_rating) }}
+                                            {% else %}
+                                                <span class="text-muted">N/A</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="td-reviews">{{ product.product_reviews if product.product_reviews else 0 }}</td>
+                                        <td class="td-actions">
+                                            <div class="action-buttons">
+                                                <form method="POST" action="{{ url_for('admin.delete_products', product_id = product.pid)  }}" style="display: inline;" onsubmit= "return confirm('Are you sure you want to delete this product?');">
+                                                    <button type="submit" class="btn-action btn-delete" title="Delete">
+                                                        🗑️
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <h3 class="empty-title">No Products Found</h3>
+                        <p class="empty-text">Start by adding your first product to the inventory.</p>
+                        <a href="{{ url_for('admin.add_products') }}" class="btn-empty-action">
+                            <span class="btn-icon">➕</span>
+                            Add Product
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <!-- footer -->
+    <footer class="admin-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="/images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="/images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="/images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="/images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src = "/js/script.js"></script>
+
+</body>
+</html>

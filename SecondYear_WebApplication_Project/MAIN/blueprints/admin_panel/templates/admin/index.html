@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ReLeaf</title>
+    <link rel="stylesheet" href="/style/admin.css">
+</head>
+<body>
+    <!-- flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        
+        <div class="flash-notification {{ category }}" id = flash_notif>
+            <span>{{ message }}</span>
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- admin header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="admin-title">Admin Dashboard</h1>
+                <p class="welcome-text">Welcome back, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Admin{% endif %}!</p>
+            </div>
+            <div class="header-right">
+                <a href="{{ url_for('core.index') }}" class="btn-back">← Back to Site</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- main content -->
+    <main class="admin-container">
+        <!-- statistics section -->
+        <section class="stats-section">
+            <h2 class="section-title">Quick Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ total_users or 0 }}</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ total_products or 0 }}</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ total_orders or 0 }}</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- quick actions section -->
+        <section class="actions-section">
+            <h2 class="section-title">Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="{{ url_for('admin.add_products')}}" class="action-btn action-add">
+                    <span class="action-icon">➕</span>
+                    <span class="action-text">Add Product</span>
+                </a>
+                <a href="{{ url_for('admin.manage_products') }}" class="action-btn action-products">
+                    <span class="action-icon">📦</span>
+                    <span class="action-text">Manage Products</span>
+                </a>
+                <a href="{{ url_for('admin.manage_users')}}" class="action-btn action-users">
+                    <span class="action-icon">👥</span>
+                    <span class="action-text">Manage Users</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- recent activity section -->
+        <section class="activity-section">
+            <div class="activity-grid">
+                <!-- recent users -->
+                <div class="activity-card">
+                    <div class="activity-header">
+                        <h3 class="activity-title">Recent Users</h3>
+                    </div>
+                    <div class="activity-list">
+                        {% for user in users[:5] %}
+                            <div class="activity-item">
+                                <div class="activity-icon">👤</div>
+                                <div class="activity-details">
+                                    <div class="activity-name">{{ user.username }}</div>
+                                    <div class="activity-date">Joined: {{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'Recently' }}</div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="empty-state">
+                                <p>No users yet</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- recent products -->
+                <div class="activity-card">
+                    <div class="activity-header">
+                        <h3 class="activity-title">Recent Products</h3>
+                    </div>
+                    <div class="activity-list">
+                        {% if recent_products %}
+                            {% for product in recent_products[-5:] %}
+                                <div class="activity-item">
+                                    <div class="activity-icon">📦</div>
+                                    <div class="activity-details">
+                                        <div class="activity-name">{{ product.product_name }}</div>
+                                        <div class="activity-date">₱{{ product.product_price }}</div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <p>No products yet</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- footer -->
+    <footer class="admin-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="/images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="/images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="/images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="/images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src = "/js/script.js"></script>
+
+</body>
+</html>

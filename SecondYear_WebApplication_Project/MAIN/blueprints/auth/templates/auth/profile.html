@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ReLeaf</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- cart sidebar -->
+    <aside class="sidebar cart-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="cart-title">Your Cart</h2>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- cart items will be added here dynamically -->
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="sidebar-btn checkout-btn">CHECKOUT</button>
+            <form action = "{{ url_for('auth.logout') }}" method = 'GET'>
+                <button class="sidebar-btn logout-btn">LOG OUT</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- toast notification -->
+    <div class="toast" id="toast">Added to cart!</div>
+
+    <!-- header -->
+    <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <img src="/images/logo/logo_with_no_background.png" alt="ReLeaf Logo" class="logo-icon">
+                    <span class="logo-text">ReLeaf</span>
+                </div>
+                <nav class="main-nav">
+                    <a href="{{ url_for('core.index') }}" class="nav-link">Home</a>
+                    <a href="{{ url_for('products.products') }}" class="nav-link">Products</a>
+                    <a href="{{ url_for('core.about') }}" class="nav-link">About Us</a>
+                    <a href="{{ url_for('core.contact') }}" class="nav-link">Contact Us</a>
+                </nav>
+                <div class="header-icons">
+                    {% if current_user.is_authenticated %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.profile') }}">
+                            <img src="/images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% else %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.login') }}">
+                            <img src="/images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% endif %}
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <img src="/images/logo/transparent_cart_logo.png" alt="Cart" class="icon-img">
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="profile-container">
+        <!-- Profile Header Section -->
+        <section class="profile-header-section">
+            <div class="profile-avatar">
+                <div class="avatar-circle">{{ current_user.username[0].upper() if current_user.username else 'U' }}</div>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-username">{{ current_user.username }}</h1>
+                <p class="profile-member-since">Member since {{ current_user.created_at.strftime('%B %d, %Y') if current_user.created_at else 'Recently' }}</p>
+            </div>
+        </section>
+
+        <!-- account details section -->
+        <section class="account-details">
+            <h2 class="section-title">Account Details</h2>
+            <div class="details-card">
+                <div class="detail-row">
+                    <div class="detail-icon">👤</div>
+                    <div class="detail-content">
+                        <div class="detail-label">Username</div>
+                        <div class="detail-value">{{ current_user.username }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-icon">📅</div>
+                    <div class="detail-content">
+                        <div class="detail-label">Account Created</div>
+                        <div class="detail-value">{{ current_user.created_at.strftime('%B %d, %Y at %I:%M %p') if current_user.created_at else 'Recently' }}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- activity overview section -->
+        <section class="activity-overview">
+            <h2 class="section-title">Activity Overview</h2>
+            
+            <div class="activity-grid">
+                <!-- Recent Orders -->
+                <div class="activity-card">
+                    <div class="activity-card-header">
+                        <h3 class="activity-card-title">🛒 Recent Orders</h3>
+                    </div>
+                    <div class="activity-card-content">
+                        {% if user_orders %}
+                            {% for order in user_orders %}
+                                <div class="activity-item">
+                                    <div class="activity-item-icon">📦</div>
+                                    <div class="activity-item-details">
+                                        <div class="activity-item-title">Order #{{ order.order_id }}</div>
+                                        <div class="activity-item-meta">
+                                            <span class="activity-date">{{ order.created_at.strftime('%b %d, %Y') if order.created_at else 'Recent' }}</span>
+                                            <span class="activity-separator">•</span>
+                                            <span class="activity-amount">₱{{ '%.2f'|format(order.line_total) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="activity-item-status status-{{ order.status.lower() if order.status else 'pending' }}">
+                                        {{ order.status if order.status else 'Pending' }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <div class="empty-icon">🛍️</div>
+                                <p class="empty-text">No orders yet</p>
+                                <a href="{{ url_for('products.products') }}" class="empty-action-btn">Start Shopping</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Wishlist -->
+                <div class="activity-card">
+                    <div class="activity-card-header">
+                        <h3 class="activity-card-title">❤️ Wishlist</h3>
+                    </div>
+                    <div class="activity-card-content">
+                        {% if wishlist_items %}
+                            {% for item in wishlist_items[:5] %}
+                                <div class="activity-item">
+                                    <div class="activity-item-icon">💚</div>
+                                    <div class="activity-item-details">
+                                        <div class="activity-item-title">{{ item.product.product_name if item.product else item.product_name }}</div>
+                                        <div class="activity-item-meta">
+                                            <span class="activity-price">₱{{ '%.2f'|format(item.product.product_price if item.product else item.product_price) }}</span>
+                                        </div>
+                                    </div>
+                                    <a href="{{ url_for('products.products', id=item.product.pid if item.product else item.pid) }}" class="activity-item-action">View</a>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <div class="empty-icon">💚</div>
+                                <p class="empty-text">No saved items yet</p>
+                                <a href="{{ url_for('products.products') }}" class="empty-action-btn">Browse Products</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+    </main>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="/images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="/images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="/images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="/images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/cart-manager.js"></script>
+    <script src="/js/script.js"></script>
+    <script src="/js/products-script.js"></script>
+    
+</body>
+</html>

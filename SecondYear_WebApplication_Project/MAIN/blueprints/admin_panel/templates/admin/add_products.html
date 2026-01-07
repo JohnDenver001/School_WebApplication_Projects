@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - ReLeaf Admin</title>
+    <link rel="stylesheet" href="/style/admin.css">
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- flash  -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        
+        <div class="flash-notification {{ category }}" id = flash_notif>
+            <span>{{ message }}</span>
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- admin header -->
+    <header class="admin-header">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="admin-title">Add New Product</h1>
+                <p class="welcome-text">Create a new product listing</p>
+            </div>
+            <div class="header-right">
+                <a href="{{ url_for('admin.admin') }}" class="btn-back">← Back to Dashboard</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- main content -->
+    <main class="admin-container">
+        <section class="form-section">
+            <div class="form-card">
+                <form method="POST" action="{{ url_for('admin.add_products') }}" enctype="multipart/form-data" class="product-form">
+                    
+                    <!-- product name -->
+                    <div class="form-group">
+                        <label for="product_name" class="form-label">
+                            <span class="label-icon">📦</span>
+                            Product Name *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="product_name" 
+                            name="product_name" 
+                            class="form-input" 
+                            placeholder="Enter product name"
+                            required
+                            maxlength="200"
+                        >
+                    </div>
+
+                    <!-- product price -->
+                    <div class="form-group">
+                        <label for="product_price" class="form-label">
+                            <span class="label-icon">💰</span>
+                            Price *
+                        </label>
+                        <input 
+                            type="number" 
+                            id="product_price" 
+                            name="product_price" 
+                            class="form-input" 
+                            placeholder="0.00"
+                            step="0.01"
+                            min="0"
+                            required
+                        >
+                    </div>
+
+                    <!-- product stock -->
+                    <div class="form-group">
+                        <label for="product_stock" class="form-label">
+                            <span class="label-icon">📊</span>
+                            Stock Quantity *
+                        </label>
+                        <input 
+                            type="number" 
+                            id="product_stock" 
+                            name="product_stock" 
+                            class="form-input" 
+                            placeholder="0"
+                            min="0"
+                            required
+                        >
+                    </div>
+
+                    <!-- product category -->
+                    <div class="form-group">
+                        <label for="product_category" class="form-label">
+                            <span class="label-icon">🏷️</span>
+                            Category *
+                        </label>
+                        <select id="product_category" name="product_category" class="form-input" required>
+                            <option value="">Select a category</option>
+                            <option value="Eco-Household">Eco Household</option>
+                            <option value="Eco-Fashion">Eco Fashion</option>
+                            <option value="Gardening">Gardening</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Self Care">Self Care</option>
+                        </select>
+                    </div>
+
+                    <!-- product description -->
+                    <div class="form-group">
+                        <label for="product_description" class="form-label">
+                            <span class="label-icon">📝</span>
+                            Description *
+                        </label>
+                        <textarea 
+                            id="product_description" 
+                            name="product_description" 
+                            class="form-textarea" 
+                            placeholder="Enter product description"
+                            rows="5"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <!-- product image -->
+                    <div class="form-group">
+                        <label for="product_image" class="form-label">
+                            <span class="label-icon">🖼️</span>
+                            Product Image
+                        </label>
+                        <input 
+                            type="file" 
+                            id="product_image" 
+                            name="product_image" 
+                            class="form-input-file"
+                            accept="image/*"
+                        >
+                        <small class="form-hint">Supported formats: JPG and PNG</small>
+                    </div>
+
+                    <!-- product rating -->
+                    <div class="form-group">
+                        <label for="product_rating" class="form-label">
+                            <span class="label-icon">⭐</span>
+                            Initial Rating (Optional)
+                        </label>
+                        <input 
+                            type="number" 
+                            id="product_rating" 
+                            name="product_rating" 
+                            class="form-input" 
+                            placeholder="0.0"
+                            step="0.1"
+                            min="0"
+                            max="5"
+                        >
+                        <small class="form-hint">Rating from 0.0 to 5.0</small>
+                    </div>
+
+                    <!-- form actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">
+                            <span class="btn-icon">✓</span>
+                            Add Product
+                        </button>
+                        <a href="{{ url_for('admin.admin') }}" class="btn-cancel">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- footer -->
+    <footer class="admin-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="/images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="/images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="/images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="/images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src = "/js/script.js"></script>
+
+</body>
+</html>

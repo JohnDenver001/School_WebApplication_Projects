@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ReLeaf</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        
+        <div class="flash-notification {{ category }}" id = flash_notif>
+            <span>{{ message }}</span>
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
+    <!-- cart sidebar -->
+    <aside class="sidebar cart-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="cart-title">Your Cart</h2>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- cart items will be added here dynamically -->
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="sidebar-btn checkout-btn">CHECKOUT</button>
+            <form action = "{{ url_for('auth.logout') }}" method = 'GET'>
+                <button class="sidebar-btn logout-btn">LOG OUT</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- toast notification -->
+    <div class="toast" id="toast">Added to cart!</div>
+
+    <div class="main-content">
+        <!-- header -->
+        <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <img src="images/logo/logo_with_no_background.png" alt="ReLeaf Logo" class="logo-icon">
+                    <span class="logo-text">ReLeaf</span>
+                </div>
+                <nav class="main-nav">
+                    <a href="{{ url_for('core.index') }}" class="nav-link">Home</a>
+                    <a href="{{ url_for('products.products') }}" class="nav-link">Products</a>
+                    <a href="{{ url_for('core.about') }}" class="nav-link">About Us</a>
+                    <a href="{{ url_for('core.contact')}}" class="nav-link">Contact Us</a>
+                </nav>
+                <div class="header-icons">
+                    {% if current_user.is_authenticated %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.profile') }}">
+                            <img src="images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% else %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.login') }}">
+                            <img src="images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% endif %}
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <img src="images/logo/transparent_cart_logo.png" alt="Cart" class="icon-img">
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- hero section -->
+        <section class="hero">
+            <img src="images/logo/hero_background.png" alt="Hero Background" class="hero-background-img">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Your Sustainable Lifestyle Starts Here.</h1>
+                    <p class="hero-subtitle">Promoting mindful choices through environmentally responsible products that empower individuals to live sustainably, support ethical brands, and make a lasting positive impact on our planet.</p>
+                    <a href="{{ url_for('products.products') }}" class="cta-button">Shop</a>
+                </div>
+                <div class="hero-image">
+                    <img src="images/logo/hero_section_logo.png" alt="Eco-friendly shopping cart" class="hero-illustration">
+                </div>
+            </div>
+        </section>
+
+        <!-- contribution section -->
+        <section class="contribution-section">
+            <h2 class="contribution-title">CONTRIBUTION</h2>
+            <p class="contribution-subtitle">Your small actions create big waves of change for the planet.</p>
+            
+            <div class="statistics-section">
+                <div class="statistics-container">
+                    <div class="stat-card" data-target="1000" data-delay="0">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Happy Customers</div>
+                    </div>
+                    <div class="stat-card" data-target="30" data-delay="0.2">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Eco Products</div>
+                    </div>
+                    <div class="stat-card" data-target="10000" data-delay="0.4">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Trees Saved</div>
+                    </div>
+                    <div class="stat-card" data-target="50000" data-delay="0.6">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Plastic Bottles Reduced</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="product-highlight">
+            <h2 class="section-title">FEATURED PRODUCTS</h2>
+            <p class="section-subtitle">Discover our top eco-friendly picks crafted to make sustainable living easier and more impactful. These highlighted products offer the perfect blend of quality, practicality, and planet-friendly innovation.</p>
+            <div class="highlight-container">
+                <button class="carousel-btn prev-btn" aria-label="Previous">‹</button>
+                <div class="highlight-image">
+                    <div class="main-product-image">
+                        <img src="images/Products/product1.jpg" alt="Featured eco-friendly product" id="highlightedImage">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <div class="thumbnail active" data-index="0">
+                            <img src="images/Products/product1.jpg" alt="Product thumbnail 1">
+                        </div>
+                        <div class="thumbnail" data-index="1">
+                            <img src="images/Products/product2.jpg" alt="Product thumbnail 2">
+                        </div>
+                        <div class="thumbnail" data-index="2">
+                            <img src="images/Products/product3.jpg" alt="Product thumbnail 3">
+                        </div>
+                    </div>
+                </div>
+                <div class="highlight-info">
+                    <h2 class="highlight-title" id="featuredProductTitle">Nature Natural Dishwashing Liquid</h2>
+                    <div class="highlight-description">
+                        <p id="featuredProductDescription">Made from 100% biodegradable bamboo, this toothbrush offers a sustainable alternative to plastic. The soft bristles are gentle on gums while effectively cleaning teeth. Perfect for daily use and ideal for eco-conscious individuals looking to reduce their plastic footprint.</p>
+                    </div>
+                    <a href="{{ url_for('products.products' )}}" class="products-btn">Shop Now</a>
+                </div>
+                <button class="carousel-btn next-btn" aria-label="Next">›</button>
+            </div>
+        </section>
+
+        <!-- testimonials section -->
+        <section class="testimonials-section">
+            <h2 class="contribution-title">TESTIMONIALS</h2>
+            <p class="contribution-subtitle">Hear from our community about how ReLeaf has inspired positive change in their everyday lives. Their experiences showcase the impact of choosing sustainability and living more consciously.</p>
+            
+            <div class="testimonials-grid">
+                <!-- testimonial card 1 -->
+                <div class="testimonial-card">
+                    <div class="star-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <div class="verified-badge">
+                        <span class="checkmark">✓</span>
+                        <span>Verified Customer</span>
+                    </div>
+                    <p class="testimonial-text">ANG LOPET</p>
+                    <div class="testimonial-footer">
+                        <img src="images/testimonials/beltran.jpg" alt="Customer photo" class="customer-photo">
+                        <div class="customer-info">
+                            <p class="customer-name">Kenneth Beltran</p>
+                            <p class="customer-location">Las Piñas, 3 days ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- testimonial card 2 -->
+                <div class="testimonial-card">
+                    <div class="star-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star empty">★</span>
+                    </div>
+                    <div class="verified-badge">
+                        <span class="checkmark">✓</span>
+                        <span>Verified Customer</span>
+                    </div>
+                    <p class="testimonial-text">LEGIT BA TO YA? ORDER ULE AQ</p>
+                    <div class="testimonial-footer">
+                        <img src="images/testimonials/guda.jpg" alt="Customer photo" class="customer-photo">
+                        <div class="customer-info">
+                            <p class="customer-name">Gilbert Guda</p>
+                            <p class="customer-location">Las Piñas, 2 days ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- testimonial card 3 -->
+                <div class="testimonial-card">
+                    <div class="star-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star empty">★</span>
+                    </div>
+                    <div class="verified-badge">
+                        <span class="checkmark">✓</span>
+                        <span>Verified Customer</span>
+                    </div>
+                    <p class="testimonial-text">PRE ORDER NA KAYO DITO ANG GANDA NG PRODUCT</p>
+                    <div class="testimonial-footer">
+                        <img src="images/testimonials/jai.jpg" alt="Customer photo" class="customer-photo">
+                        <div class="customer-info">
+                            <p class="customer-name">Jairo Olandesca</p>
+                            <p class="customer-location">Las Piñas, 23 hours ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- testimonial card 4 -->
+                <div class="testimonial-card">
+                    <div class="star-rating">
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                        <span class="star filled">★</span>
+                    </div>
+                    <div class="verified-badge">
+                        <span class="checkmark">✓</span>
+                        <span>Verified Customer</span>
+                    </div>
+                    <p class="testimonial-text">So far it's been a wonderful experience. I love the range of products featuring regularly. Most of the products match my taste</p>
+                    <div class="testimonial-footer">
+                        <img src="images/testimonials/lee.jpg" alt="Customer photo" class="customer-photo">
+                        <div class="customer-info">
+                            <p class="customer-name">LeeMark Gallos</p>
+                            <p class="customer-location">Las Piñas, 5 hours ago</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/amolo.kvinlee" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- bottom navigation (mobile & tablet) -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href=" {{ url_for('core.index' )}} " class="bottom-nav-item active">
+                <img src="images/CellphoneResponsiveness_Logo/Home.png" alt="Home" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Home</span>
+            </a>
+            <a href="{{ url_for('products.products') }}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/Products.png" alt="Products" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Products</span>
+            </a>
+            <a href="{{ url_for('core.about') }}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/about_us.png" alt="About" class="bottom-nav-icon">
+                <span class="bottom-nav-label">About Us</span>
+            </a>
+            <a href="{{ url_for('core.contact' )}}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/contact.png" alt="Contact" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Contact</span>
+            </a>
+        </div>
+    </nav>
+
+    <script src="/js/cart-manager.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>

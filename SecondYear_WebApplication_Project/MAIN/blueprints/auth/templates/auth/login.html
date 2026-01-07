@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ReLeaf</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        
+        <div class="flash-notification {{ category }}" id = flash_notif>
+            <span>{{ message }}</span>
+            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        </div>
+
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <img src="/images/logo/logo_with_no_background.png" alt="ReLeaf Logo" class="auth-logo-img">
+                <h2 class="auth-brand">ReLeaf</h2>
+            </div>
+            <h1 class="auth-title">Welcome Back</h1>
+            <p class="auth-subtitle">Login to continue to your account</p>
+            
+            <form action = "{{ url_for('auth.login') }}" class="auth-form" id="loginForm" method = 'POST'>
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="email" class="form-input" placeholder="Enter your username" name = "username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" name = "password"required>
+                </div>
+                
+                <button type="submit" class="auth-btn">Login</button>
+            </form>
+            
+            <p class="auth-link-text">
+                Don't have an account? <a href="{{ url_for('auth.signup') }}" class="auth-link">Sign up here.</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

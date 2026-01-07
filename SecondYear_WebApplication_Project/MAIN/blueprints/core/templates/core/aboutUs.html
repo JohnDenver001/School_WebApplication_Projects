@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ReLeaf</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <!-- cart sidebar -->
+    <aside class="sidebar cart-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="cart-title">Your Cart</h2>
+            <button class="close-btn" id="closeSidebar">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- cart items will be added here dynamically -->
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="sidebar-btn checkout-btn">CHECKOUT</button>
+            <button class="sidebar-btn logout-btn">LOG OUT</button>
+        </div>
+    </aside>
+
+    <!-- toast notification -->
+    <div class="toast" id="toast">Added to cart!</div>
+
+    <div class="main-content">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-container">
+                <div class="logo">
+                    <img src="images/logo/logo_with_no_background.png" alt="ReLeaf Logo" class="logo-icon">
+                    <span class="logo-text">ReLeaf</span>
+                </div>
+                <nav class="main-nav">
+                    <a href="{{ url_for('core.index' )}}" class="nav-link" title="Home">Home</a>
+                    <a href="{{ url_for('products.products' )}}" class="nav-link" title="Products">Products</a>
+                    <a href="{{ url_for('core.about' )}}" class="nav-link" title="About Us">About Us</a>
+                    <a href="{{ url_for('core.contact' )}}" class="nav-link" title="Contact Us">Contact Us</a>
+                </nav>
+                <div class="header-icons">
+                    {% if current_user.is_authenticated %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.profile') }}">
+                            <img src="images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% else %}
+                        <a class="icon-btn account-btn" href="{{ url_for('auth.login') }}">
+                            <img src="images/logo/transparent_account_logo.png" alt="Account" class="icon-img">
+                        </a>
+                    {% endif %}
+                    <button class="icon-btn cart-btn" id="cartBtn">
+                        <img src="images/logo/transparent_cart_logo.png" alt="Cart" class="icon-img">
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- about us page content -->
+        <main class="about-page">
+            
+            <!-- main about us section -->
+            <section class="about-intro-section">
+                <div class="about-intro-card">
+                    <div class="about-intro-icon">
+                        <img src="images/logo/logo_with_no_background.png" alt="ReLeaf Logo">
+                    </div>
+                    <div class="about-intro-content">
+                        <h1 class="about-title">ABOUT US</h1>
+                        <p class="about-text">
+                            ReLeaf was created because we see how everyday products are affecting our environment. Many people want to 
+                            help the planet, but they don't always know where or how to start. That's why ReLeaf was built-all of our friendly 
+                            and beautiful products are sourced from sustainable, ethical suppliers, and we prioritize products that are 
+                            products that are using harmful and wasteful Plastic Free, and Ethically made. In bigger environmental Action, 
+                            we believe that every product choice matters. ReLeaf isn't just a guide; people towards greener living, one product 
+                            at a time.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- mission, vision, core values section -->
+            <section class="values-section">
+                <h2 class="values-main-title">OUR FOUNDATION</h2>
+                <p class="values-subtitle">Our mission, vision, and core values reflect our dedication to sustainability and responsible living. They guide every decision we make as we work toward creating a positive environmental impact.</p>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <h2 class="value-title">Mission</h2>
+                        <p class="value-text">
+                            ReLeaf aims to promote sustainable living for a healthy planet and environmentally conscious future. Our 
+                            mission is to educate, encourage responsible consumption, and inspire positive environmental change through practical 
+                            and simple daily choices.
+                        </p>
+                    </div>
+                    <div class="value-card">
+                        <h2 class="value-title">Vision</h2>
+                        <p class="value-text">
+                            Our vision is to become a more eco-friendly and environmentally conscious change around the world. 
+                            We imagine a future where sustainability becomes the new normal, where nature is preserved, 
+                            and where every individual contributes to healing the Earth begins with the 
+                            choices we make today.
+                        </p>
+                    </div>
+                    <div class="value-card">
+                        <h2 class="value-title">Core Values</h2>
+                        <p class="value-text">
+                            At ReLeaf, we value sustainability, choosing products that reduce waste and protect the 
+                            planet. We believe in transparency and ethical practices across our supply chain. We embrace 
+                            eco-friendly solutions for everyday life. We aim to inspire others as our product meets safe and 
+                            reliable services to live our customers.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- our advocacy section -->
+            <section class="advocacy-section">
+                <div class="advocacy-container">
+                    <div class="advocacy-content-left">
+                        <h2 class="advocacy-title">OUR ADVOCACY</h2>
+                        <p class="advocacy-text">
+                            ReLeaf Advocacy is a cause and lead the movement to environmental conscious of eco-friendly products and sustainable 
+                            living every choice we make, from the items we purchase to the habits we cultivate, 
+                            has an impact on our planet. Through ReLeaf, we're cultivating greener future, and advocating communities about 
+                            climate preservation, plastic pollution, and conservation. At ReLeaf, our advocacy work focuses on three key areas: 
+                            Education, Community Building, and Partnerships.
+                        </p>
+                    </div>
+                    <div class="advocacy-image-right">
+                        <img src="images/logo/Advocacy_Picture.jpg" alt="Our Advocacy" class="section-image">
+                    </div>
+                </div>
+            </section>
+
+            <!-- why choose releaf section -->
+            <section class="why-choose-section">
+                <div class="why-choose-container">
+                    <div class="why-choose-image-left">
+                        <img src="images/logo/WhyChooseReleaf_Picture.jpg" alt="Why Choose ReLeaf" class="section-image">
+                    </div>
+                    <div class="why-choose-content-right">
+                        <h2 class="why-choose-title">WHY CHOOSE RELEAF?</h2>
+                        <p class="why-choose-text">
+                            Choosing ReLeaf means choosing a Marketplace with a purpose: driving, led 
+                            by the community of eco-friendly products dedicated to sustainable life everyone. 
+                            We are dedicated to verifying every product we feature on our platform and offering more than just 
+                            greener alternatives while we're connecting environmentally conscious shoppers with ethical, 
+                            eco-friendly brands that share our commitment to protecting the planet. Unlike large mass-produced 
+                            greener without rejection, and they reduce the harmful effects of plastic pollution, and a better planet for 
+                            future. Shopping and ReLeaf unifies your purpose with your faith in a better, 
+                            sustainable, resilient world.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- meet our team section -->
+            <section class="team-section">
+                <h2 class="team-main-title">MEET OUR TEAM</h2>
+                <p class="team-subtitle">Meet the creative minds driving our vision forward. From full-stack development to content, design, research, and documentation, our dedicated team combines expertise and passion to bring your ideas to life.</p>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <img src="images/Team_Picture/denver.png" alt="John Denver Acar" class="team-member-img">
+                        </div>
+                        <h3 class="team-name">John Denver Acar</h3>
+                        <h4 class="member-role">Full Stack Developer</h4>
+                        <p class="team-role">Hi, I'm John Denver, a Full Stack Developer passionate about building seamless and efficient web solutions. I love turning complex problems into simple, functional applications that users enjoy.</p>
+                        <div class="team-socials">
+                            <a href="#" class="social-link"><img src="images/logo/transparent_fb_logo.png" alt="Facebook"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_ig_logo.webp" alt="Instagram"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_x_logo.png" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <img src="images/Team_Picture/amolo.jpg" alt="Kvin Lee Amolo" class="team-member-img">
+                        </div>
+                        <h3 class="team-name">Kvin Lee Amolo</h3>
+                        <h4 class="member-role">Content Writer</h4>
+                        <p class="team-role">I'm Kvin Lee, a Content Writer who thrives on crafting clear and engaging stories. My goal is to make information accessible and compelling for every reader.</p>
+                        <div class="team-socials">
+                            <a href="#" class="social-link"><img src="images/logo/transparent_fb_logo.png" alt="Facebook"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_ig_logo.webp" alt="Instagram"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_x_logo.png" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <img src="images/Team_Picture/Marc.png" alt="Marc Lorence Bulong" class="team-member-img">
+                        </div>
+                        <h3 class="team-name">Marc Lorence Bulong</h3>
+                        <h4 class="member-role">Documentation</h4>
+                        <p class="team-role">Hello, I'm Marc Lorence, focused on creating precise and organized documentation. I ensure every detail is clear, accurate, and easy to follow.</p>
+                        <div class="team-socials">
+                            <a href="#" class="social-link"><img src="images/logo/transparent_fb_logo.png" alt="Facebook"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_ig_logo.webp" alt="Instagram"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_x_logo.png" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <img src="images/Team_Picture/Lhee.png" alt="Lhee Jhymz Emperado" class="team-member-img">
+                        </div>
+                        <h3 class="team-name">Lhee Jhymz Emperado</h3>
+                        <h4 class="member-role">Product Researcher</h4>
+                        <p class="team-role">I'm Lhee Jhymz, a Product Researcher dedicated to uncovering insights that drive innovation. I enjoy exploring trends and data to help shape meaningful products.</p>
+                        <div class="team-socials">
+                            <a href="#" class="social-link"><img src="images/logo/transparent_fb_logo.png" alt="Facebook"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_ig_logo.webp" alt="Instagram"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_x_logo.png" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <img src="images/Team_Picture/Norien.png" alt="Norien Mae Lerio" class="team-member-img">
+                        </div>
+                        <h3 class="team-name">Norien Mae Lerio</h3>
+                        <h4 class="member-role">UI/UX Designer</h4>
+                        <p class="team-role">Hi, I'm Norien Mae, a UI/UX Designer passionate about designing intuitive and visually appealing experiences. I aim to make every interaction enjoyable and user-friendly.</p>
+                        <div class="team-socials">
+                            <a href="#" class="social-link"><img src="images/logo/transparent_fb_logo.png" alt="Facebook"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_ig_logo.webp" alt="Instagram"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_x_logo.png" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-photo">
+                            <img src="images/Team_Picture/andrew.jpg" alt="Norien Mae Lerio" class="team-member-img">
+                        </div>
+                        <h3 class="team-name">Andrew Rico</h3>
+                        <h4 class="member-role">Documentation</h4>
+                        <p class="team-role">I'm Andrew, specializing in meticulous documentation that keeps projects organized and efficient. I focus on clarity, consistency, and reliability in every record I create.</p>
+                        <div class="team-socials">
+                            <a href="#" class="social-link"><img src="images/logo/transparent_fb_logo.png" alt="Facebook"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_ig_logo.webp" alt="Instagram"></a>
+                            <a href="#" class="social-link"><img src="images/logo/transparent_x_logo.png" alt="X"></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="copyright">© ReLeaf. All rights reserved.</p>
+                </div>
+                <div class="social-links">
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook">
+                        <img src="images/logo/transparent_fb_logo.png" alt="Facebook"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+                        <img src="images/logo/transparent_ig_logo.webp" alt="Instagram"/>
+                    </a>
+                    <a href="" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X (Twitter)">
+                        <img src="images/logo/transparent_x_logo.png" alt="X"/>
+                    </a>
+                    <a href="" class="social-link" aria-label="Email">
+                        <img src="images/logo/transparent_gmail_logo.png" alt="Email"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- bottom navigation (mobile & tablet) -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-container">
+            <a href="{{ url_for('core.index' )}}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/Home.png" alt="Home" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Home</span>
+            </a>
+            <a href="{{ url_for('products.products') }}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/Products.png" alt="Products" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Products</span>
+            </a>
+            <a href="{{ url_for('core.about') }}" class="bottom-nav-item active">
+                <img src="images/CellphoneResponsiveness_Logo/about_us.png" alt="About" class="bottom-nav-icon">
+                <span class="bottom-nav-label">About Us</span>
+            </a>
+            <a href="{{ url_for('core.contact') }}" class="bottom-nav-item">
+                <img src="images/CellphoneResponsiveness_Logo/contact.png" alt="Contact" class="bottom-nav-icon">
+                <span class="bottom-nav-label">Contact</span>
+            </a>
+        </div>
+    </nav>
+
+    <script src="/js/cart-manager.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>
