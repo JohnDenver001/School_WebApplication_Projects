@@ -292,7 +292,7 @@ This project is licensed under the MIT License.
 
 ## Author and Credits
 
-- Author: [Your Name](https://github.com/JohnDenver001)
+- Author: [John Denver C. Acar](https://github.com/JohnDenver001)
 - School Project: Second Year Web Application Development (1st Semester, Final Term)
 
 This is a school project developed as part of the web development curriculum. The project demonstrates full-stack development skills using Python, Flask, and modern web technologies.

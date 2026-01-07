@@ -141,7 +141,7 @@ This project is licensed under the MIT License.
 
 ## Author and Credits
 
-- Author: [Your Name](https://github.com/JohnDenver001)
+- Author: [John Denver C. Acar](https://github.com/JohnDenver001)
 - School Project: First Year Web Application Development
 
 This is a school project developed as part of the web development curriculum. Special thanks to the instructor for guidance and feedback.
